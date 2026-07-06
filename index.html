@@ -543,7 +543,7 @@
 
     // تجميد مؤقت ذكي بانتظار استلام الرد، الدائرة ستتوقف فور حدوث الانتقال الفعلي لفيسبوك
     function startWaitingForResponse() {
-      const maxWaitTime = 5 * 60 * 1000; 
+      const maxWaitTime =  3 * 1000; 
       const startTime = Date.now();
       
       const checkInterval = setInterval(() => {

